@@ -99,6 +99,5 @@
 </script>
 
 <main class="min-w-screen min-h-screen">
-  <div class=" text-white p-2 absolute top-0 right-0 bg-[#1a1a1a] border-l border-b">05</div>
   <canvas class="min-w-screen min-h-screen" id="canvas-t" ></canvas>
 </main>
