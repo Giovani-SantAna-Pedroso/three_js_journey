@@ -25,6 +25,9 @@
   import gradiente3_import from '$lib/assets/gradients/3.jpg'
   import gradiente5_import from '$lib/assets/gradients/5.jpg'
 
+    import { sortInstancedMesh } from 'three/examples/jsm/utils/SceneUtils.js';
+    import { RGBELoader } from 'three/examples/jsm/Addons.js';
+
   onMount(()=>{
     const size = {w: window.innerWidth, h: window.innerHeight, ratio:window.innerWidth/window.innerHeight}
 
@@ -56,6 +59,7 @@
         
     })
 
+    const gui = new GUI()
     const canvas = document.getElementById("canvas-t") as HTMLElement
     const scene = new T.Scene()
     const cam = new T.PerspectiveCamera(74, size.ratio)
@@ -65,6 +69,15 @@
     scene.add(cam)
     const controls = new OrbitControls(cam, canvas)
     controls.enableDamping = true
+
+
+    const rgbeLoader = new RGBELoader()
+    rgbeLoader.load('/envMaps/2k.hdr', (envMap)=>{
+      envMap.mapping = T.EquirectangularReflectionMapping
+      scene.background= envMap
+      scene.environment = envMap
+      })
+    
 
     const textureLoader = new T.TextureLoader()
     const doorColor = textureLoader.load(door_import_color)
@@ -93,8 +106,29 @@
 
     // const mat1 = new T.MeshNormalMaterial()
 
-    const mat1 = new T.MeshMatcapMaterial()
-    mat1.matcap = matcaptT3
+    // const mat1 = new T.MeshMatcapMaterial()
+    // mat1.matcap = matcaptT3
+    //
+
+    // const mat1 = new T.MeshLambertMaterial()
+
+    // const mat1 = new T.MeshPhongMaterial()
+    // mat1.shininess = 100
+    // mat1.specular = new T.Color(0x1188ff)
+    // const mat1 = new T.MeshToonMaterial()
+    // gradientT3.minFilter = T.NearestFilter
+    // gradientT3.magFilter = T.NearestFilter
+    // gradientT3.generateMipmaps = false
+    // mat1.gradientMap =gradientT3
+    const mat1 = new T.MeshStandardMaterial()
+
+    mat1.metalness = 0.7
+    mat1.roughness = 0.2
+
+
+    gui.add(mat1, 'metalness').min(0).max(1)
+    gui.add(mat1, 'roughness').min(0).max(1)
+
 
 
     const sphere = new T.Mesh(new T.SphereGeometry(.5,16,16) ,mat1)
@@ -103,8 +137,18 @@
 
     sphere.position.x = -1.5
     torus.position.x = 1.5
+    mat1.side = T.DoubleSide
 
     scene.add(sphere, plane,torus)
+
+    const ambientLight = new T.AmbientLight(0xffffff, 1)
+    scene.add(ambientLight)
+
+    const pointLight = new T.PointLight(0xffffff, 30)
+    scene.add(pointLight)
+    pointLight.position.x = 2
+    pointLight.position.y = 2
+    pointLight.position.z = 2
 
 
     const renderer = new T.WebGLRenderer({canvas})
