@@ -122,18 +122,43 @@
     // mat1.gradientMap =gradientT3
     const mat1 = new T.MeshStandardMaterial()
 
-    mat1.metalness = 0.7
-    mat1.roughness = 0.2
+    mat1.metalness = 1
+    mat1.roughness = 1
+    mat1.map = doorColor
+    mat1.aoMap = doorAmbientOcclusion
+    mat1.aoMapIntensity = 1
+    mat1.displacementMap = doorHeight
+    mat1.displacementScale = 0.1
+    mat1.metalnessMap = doorMetalness
+    mat1.roughnessMap = doorRoughness
+    mat1.normalMap = doorNormal
+    mat1.alphaMap = doorAlpha
+    mat1.transparent = true
 
+
+    const mat2 = new T.MeshPhysicalMaterial()
+
+    mat2.metalness = 1
+    mat2.roughness = 1
+    mat2.map = doorColor
+    mat2.aoMap = doorAmbientOcclusion
+    mat2.aoMapIntensity = 1
+    mat2.displacementMap = doorHeight
+    mat2.displacementScale = 0.1
+    mat2.metalnessMap = doorMetalness
+    mat2.roughnessMap = doorRoughness
+    mat2.normalMap = doorNormal
+    mat2.alphaMap = doorAlpha
+    mat2.transparent = true
 
     gui.add(mat1, 'metalness').min(0).max(1)
     gui.add(mat1, 'roughness').min(0).max(1)
 
 
 
-    const sphere = new T.Mesh(new T.SphereGeometry(.5,16,16) ,mat1)
-    const plane = new T.Mesh(new T.PlaneGeometry(1,1) ,mat1)
-    const torus = new T.Mesh( new T.TorusGeometry(.3, .2,16,32) ,mat1)
+    const sphere = new T.Mesh(new T.SphereGeometry(.5,64,64) ,mat1)
+    const plane = new T.Mesh(new T.PlaneGeometry(1,1, 100,100) ,mat1)
+    const torus = new T.Mesh( new T.TorusGeometry(.3, .2,64,128) ,mat1)
 
     sphere.position.x = -1.5
     torus.position.x = 1.5
